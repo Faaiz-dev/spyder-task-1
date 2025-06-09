@@ -1,5 +1,5 @@
 Basic-taks:
-  1.Application development\n
-  2.Blockchain\n
-  3.ML\n
+  1.Application development
+  2.Blockchain
+  3.ML
 Domain specific task in Application development (Disc Game)  
