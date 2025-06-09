@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hammer Strength Game</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: radial-gradient(circle, #ffffff, #f5f5f5);
+      color: #333;
+      text-align: center;
+      margin: 0;
+      padding: 20px;
+      min-height: 100vh;
+    }
+
+    h1 {
+      font-size: 2.5em;
+      margin-bottom: 20px;
+      text-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
+    }
+
+    #game-container {
+      position: relative;
+      width: 305px;
+      height: 400px;
+      margin: 50px auto;
+      background: linear-gradient(135deg, #ffffff, #e0e0e0);
+      border-radius: 10px;
+      border: 2px solid #bbbbbb;
+    }
+
+    #game-container img {
+      width: 100%;
+      height: 100%;
+      opacity: 0.9;
+    }
+
+    .needle {
+      width: 4px;
+      height: 50px;
+      background: red;
+      position: absolute;
+      bottom: 320px;
+      border: 1px solid #666;
+      box-shadow: 0 0 2px #666;
+      left: 50%;
+      transform-origin: bottom center;
+      transition: transform 0.1s ease;
+    }
+
+    .arrowhead {
+      width: 0;
+      height: 0;
+      border-left: 6px solid transparent;
+      border-right: 6px solid transparent;
+      border-bottom: 10px solid red;
+      position: absolute;
+      top: -10px;
+      left: -4px;
+    }
+
+    #hammer-button {
+      display: block;
+      margin: 20px auto;
+      padding: 15px 25px;
+      background: linear-gradient(135deg, #42a5f5, #1e88e5);
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background 0.3s, transform 0.1s;
+    }
+
+    #hammer-button:hover {
+      background: linear-gradient(135deg, #1e88e5, #42a5f5);
+    }
+
+    #hammer-button:active {
+      transform: scale(0.95);
+    }
+
+    #hammer-button img {
+      width: 50px;
+      height: auto;
+    }
+
+    #info {
+      margin-top: 20px;
+      font-size: 1.2em;
+    }
+
+    #score-display {
+      font-size: 1.5em;
+      font-weight: bold;
+      margin-top: 10px;
+      color: #0288d1;
+      background: #ffffff;
+      border: 1px solid #bbbbbb;
+      border-radius: 5px;
+      padding: 5px 10px;
+      display: inline-block;
+      transition: color 0.5s ease;
+    }
+
+    #score-display.active {
+      color: #d81b60;
+    }
+
+    @media (max-width: 600px) {
+      #game-container {
+        width: 250px;
+        height: 330px;
+      }
+
+      .needle {
+        height: 40px;
+        bottom: 260px;
+      }
+
+      #hammer-button img {
+        width: 40px;
+      }
+
+      #hammer-button {
+        padding: 10px 20px;
+      }
+
+      h1 {
+        font-size: 2em;
+      }
+
+      #info, #score-display {
+        font-size: 1em;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>Hammer Strength Game</h1>
+  <div id="game-container">
+    <img src="src/needle-img.png" alt="Hammer Strength Meter" />
+    <div class="needle" id="needle">
+      <div class="arrowhead"></div>
+    </div>
+  </div>
+
+  <button id="hammer-button" onclick="hammerHit()">
+    <img src="src/hammer-img.png" alt="Hammer" />
+  </button>
+
+  <div id="info">
+    <p>Hit the hammer to stop the needle</p>
+    <p id="score-display">Score: -</p>
+  </div>
+
+  <script>
+    let angle = 270;
+    let direction = 1;
+    let isSwinging = true;
+    let speed = 2;
+
+    function calculateScore(angle) {
+      const center = 360;
+      const deviation = Math.abs(angle - center);
+      const score = Math.max(0, 100 - (deviation / 90) * 100);
+      return Math.round(score);
+    }
+
+    function animateNeedle() {
+      if (!isSwinging) return;
+
+      angle += direction * speed;
+      if (angle >= 450 || angle <= 270) {
+        direction *= -1;
+      }
+
+      document.getElementById('needle').style.transform = "rotate(" + angle + "deg)";
+      requestAnimationFrame(animateNeedle);
+    }
+
+    requestAnimationFrame(animateNeedle);
+
+    function hammerHit() {
+      if (!isSwinging) {
+        isSwinging = true;
+        document.getElementById('hammer-button').innerHTML = '<img src="hammer-img.png" alt="Hammer" />';
+        document.getElementById('score-display').innerHTML = "Score: -";
+        document.getElementById('score-display').classList.remove('active');
+        angle = 270;
+        direction = 1;
+        requestAnimationFrame(animateNeedle);
+        return;
+      }
+
+      isSwinging = false;
+      const score = calculateScore(angle);
+      document.getElementById('score-display').innerHTML = "Score: " + score;
+      document.getElementById('score-display').classList.add('active');
+      document.getElementById('hammer-button').innerHTML = "Play Again";
+    }
+
+    document.addEventListener('keydown', function(event) {
+      if (event.key === 'Enter' || event.key === ' ') {
+        hammerHit();
+      }
+    });
+  </script>
+</body>
+</html>

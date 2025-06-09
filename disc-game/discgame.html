@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hammer Strength Game</title>
+  <link href="style.css" rel="stylesheet">
+</head>
+<body>
+  <h1>Disc Battle</h1>
+
+  <div id="board"></div>
+
+  <div id="info">
+    <p class="status">Player 2 (Yellow), choose a column to block for Player 1</p>
+    <div class="timers">
+      <span class="net-timer">5:00</span>
+      <span class="move-timer">30</span>
+    </div>
+    <div class="button-container">
+      <button id="pause-button" onclick="pauseOrResume()">Pause</button>
+      <button id="undo-button" onclick="undoMove()">Undo</button>
+      <button id="toggle-mode" onclick="toggleMode()">Toggle Light/Dark Mode</button>
+    </div>
+  </div>
+
+  <div id="leaderboard">
+    <h2>Leaderboard</h2>
+    <p class="display-score">Player 1 Wins: 0 | Player 2 Wins: 0</p>
+  </div>
+
+  <audio id="place-sound" src="src/audio4.wav"></audio>
+  <audio id="time-low-sound" src="src/audio2.wav"></audio>
+  <audio id="win-sound" src="src/audio3.wav"></audio>
+  <audio id="block-sound" src="src/audio1.wav"></audio>
+  <script src="script.js"></script>
+  
+</body>
+</html>
